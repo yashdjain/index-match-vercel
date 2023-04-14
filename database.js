@@ -1,5 +1,6 @@
 const { Client } = require('pg');
-var connectionString = process.env.CONNECTION_STRING
+// var connectionString = process.env.CONNECTION_STRING
+var connectionString = 'postgresql://postgres:FPTwhVf3jfVa8RPP@db.zbsncdoxoswjkbnrrgrc.supabase.co:5432/postgres'
 
 const db = new Client({
     connectionString,
@@ -15,23 +16,15 @@ function createNewAccount(details) {
     })
 }
 
-db.connect((err, client, done) => {
-    if(err) {
-        console.log('Error');
-    } else {
-        console.log('Database connected');
-        client.on('notification', (msg) => {
-            const details = msg.payload.split(',');
-            db.query('INSERT INTO logs(action, name, email, account_type, balance) VALUES (\'account-created\', $1, $2, $3, $4)', details, (err, result) => {
-                if (err) {
-                    console.error('Failed to insert data into db:', err);
-                } else {
-                    console.log('Successfully inserted data into db'); // result.rows contains the fetched data
-                }
-            })
-        })
-        const query = client.query('LISTEN new_account')
-    }
-})
+function getLogs() {
+    db.query('SELECT * from logs', (err, result) => {
+        if (err) {
+            console.error('Failed to retrieve data from db:', err);
+        } else {
+            console.log('Successfully retrieved data from db'); // result.rows contains the fetched data
+            return result
+        }
+    })
+}
 
-module.exports = { createNewAccount };
+module.exports = { createNewAccount, getLogs };
