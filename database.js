@@ -1,8 +1,7 @@
-const { Client } = require('pg');
-// var connectionString = process.env.CONNECTION_STRING
-var connectionString = 'postgresql://postgres:FPTwhVf3jfVa8RPP@db.zbsncdoxoswjkbnrrgrc.supabase.co:5432/postgres'
+const { Pool } = require('pg');
+var connectionString = process.env.CONNECTION_STRING
 
-const db = new Client({
+const db = new Pool({
     connectionString,
 });
 
@@ -16,15 +15,9 @@ function createNewAccount(details) {
     })
 }
 
-function getLogs() {
-    db.query('SELECT * from logs', (err, result) => {
-        if (err) {
-            console.error('Failed to retrieve data from db:', err);
-        } else {
-            console.log('Successfully retrieved data from db'); // result.rows contains the fetched data
-            return result
-        }
-    })
+async function getLogs() {
+    const result = await db.query('SELECT * from logs')
+    return result.rows
 }
 
 module.exports = { createNewAccount, getLogs };
