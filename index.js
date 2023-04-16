@@ -3,6 +3,7 @@ const express = require("express");
 const home = require("./routes/home");
 const accounts = require("./routes/accounts")
 const logs = require("./routes/logs")
+const cors = require("cors")
 
 // Middlewares
 const app = express();
