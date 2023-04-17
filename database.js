@@ -15,9 +15,19 @@ function createNewAccount(details) {
     })
 }
 
+function applyForLoan(details) {
+    db.query('INSERT INTO loan_applications(name, email, loan_amount, loan_type, security) VALUES ($1, $2, $3, $4, $5)', details, (err, result) => {
+        if (err) {
+            console.error('Failed to insert data into db:', err);
+        } else {
+            console.log('Successfully inserted data into db'); // result.rows contains the fetched data
+        }
+    })
+}
+
 async function getLogs() {
     const result = await db.query('SELECT * from logs')
     return result.rows
 }
 
-module.exports = { createNewAccount, getLogs };
+module.exports = { createNewAccount, getLogs, applyForLoan };
