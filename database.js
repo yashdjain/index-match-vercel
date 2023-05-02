@@ -30,4 +30,9 @@ async function getLogs() {
     return result.rows
 }
 
-module.exports = { createNewAccount, getLogs, applyForLoan };
+async function calculateSum(columnName) {
+    const sum = await db.query(`SELECT SUM(${columnName}::numeric) FROM logs`)
+    return sum.rows
+}
+
+module.exports = { createNewAccount, getLogs, applyForLoan, calculateSum };
